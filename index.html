@@ -2,10 +2,33 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>Hangman Game</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
-
+	<div class="container">
+		<h1>Hangman</h1>
+		<h2 id="press-any-key">Press any key to start.</h2>
+		<section id="game">
+			<img id="hangman" src="assets/images/hangman0.png" />
+		
+			<section id="word">
+				<h2>Current Word:</h2>
+				<p>
+					<span id="word-reveal"></span>
+				</p>
+			</section>
+		</section>
+		<section id="status">
+			<p>Hint: Think animals.</p>
+			<p>Wins: <span id="wins">0</span></p>
+			<p>Misses Left: <span id="misses-left">9</span></p>
+			<p>Letters Guessed:
+			<p><span id="letters-guessed"></span></p>
+		</section>
+	</div>
 	<script type="text/javascript" src="assets/javascript/game.js"></script>
 </body>
 </html>
