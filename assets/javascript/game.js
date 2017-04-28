@@ -19,17 +19,35 @@ var game = {
 	missesLeft: 9,		// Number of misses left
 	lettersGuessed: [],	// Letters that have been guessed
 	hiddenWord: "",		// Current word player is trying to guess
-	revealed: [],	// Array of revealed letters
-	wordBank: ["zebra","earthworm","millipede","giraffe","elephant",		// Collection of words used in the game
-				"tiger","aardvark","hyena","ostrich","warthog", "meerkat",
-				"hippopotamus","rhinoceros","cheetah","wildebeast","sloth",
-				"tapir","armadillo","scorpion","panda","gorilla",
-				"chimpanzee","orangutan","lemur","tamarin","marmoset",
-				"axolotl","shark","dolphin","manatee","walrus","penguin",
-				"dolphin","whale","pirahna","barracuda","stingray",
-				"sturgeon","eagle","falcon","sparrow","hamster",
-				"sheep","iguana","crocodile","snake","gecko","snail",
-				"antelope","camel"],
+	revealed: [],		// Array of revealed letters
+	wordBank: ["aardvark","albatross","alligator","alpaca","antelope",	// Collection of words used in the game
+				"arctic fox","armadillo","axolotl","baboon","badger",
+				"bandicoot","barnacle","barracuda","basilisk","beaver",
+				"beetle","bobcat","bonobo","buffalo","bumble bee",
+				"butterfly","camel","canary","capybara","caterpillar",
+				"centipede","chameleon","cheetah","chicken","chimpanzee",
+				"chinchilla","chipmunk","cougar","coyote","crane",
+				"crocodile","cuttlefish","dingo","dolphin","dolphin",
+				"donkey","dragonfly","dugong","eagle","earthworm",
+				"elephant","falcon","falcon","ferret","flamingo","gazelle",
+				"gecko","gecko","gibbon","gila monster","giraffe","goose",
+				"gopher","gorilla","guinea pig","hamster","hedgehog",
+				"hippopotamus","horse","hyena","iguana","impala","jackal",
+				"jaguar","jellyfish","kangaroo","koala","komodo dragon",
+				"krill","lemming","lemur","leopard","llama","lobster",
+				"manatee","manatee","mandrill","manta ray","marmoset",
+				"meerkat","millipede","mongoose","monkey","moray eel",
+				"mouse","nightingale","ocelot","octopus","opossum",
+				"orangutan","ostrich","otter","oyster","panda","panther",
+				"panther","peacock","penguin","pirahna","platypus",
+				"polar bear","porcupine","puffer fish","rabbit",
+				"raccoon","reindeer","rhinoceros","rooster","salamander",
+				"scorpion","sea cucumber","sea lion","sea sponge",
+				"seahorse","shark","sheep","sloth","snail","snake",
+				"sparrow","squid","squirrel","starfish","stingray",
+				"sturgeon","tamarin","tapir","tiger","tortoise","toucan",
+				"turtle","vampire bat","walrus","warthog","weasel","whale",
+				"wildebeast","wolverine","wombat","woodchuck","zebra"],
 	newGame: true		
 };
 
@@ -41,12 +59,23 @@ var winsSpan = document.getElementById("wins");
 var missesSpan = document.getElementById("misses-left");
 var guessedSpan = document.getElementById("letters-guessed");
 
+// Create variable for audio clip played when player guesses word correctly
+var victory = new Audio("assets/audio/victory.wav"); //source: https://www.freesound.org/people/LittleRobotSoundFactory/sounds/274180/
+var defeat = new Audio("assets/audio/defeat.wav"); // source: https://www.freesound.org/people/cabled_mess/sounds/371451/
+
 // Resets game settings to start a new game
 function newGame() {
 	game.missesLeft = 9;
 	game.lettersGuessed = [];
 	game.hiddenWord = game.wordBank[Math.floor(Math.random() * game.wordBank.length)];
 	game.revealed = new Array(game.hiddenWord.length);
+
+	// adds spaces in the hidden word to the corresponding index in the revealed array
+	for(var k = 0; k < game.revealed.length; k++) {
+		if(game.hiddenWord[k] === " "){
+			game.revealed[k] = " ";
+		}
+	}
 	updateWord();
 	updateLettersGuessed();
 	updateMisses();
@@ -62,6 +91,8 @@ function updateWord() {
 
 		if(char === undefined) {
 			result += "_";
+		} else if(char === " ") {
+			result += "<br>";
 		} else {
 			result += char;
 		}
@@ -70,7 +101,7 @@ function updateWord() {
 			result += " ";
 	}
 
-	revealSpan.textContent = result;
+	revealSpan.innerHTML = result;
 };
 
 // Updates letters guessed
@@ -134,11 +165,12 @@ document.onkeyup = function(event) {
 
 					// if all letters are revealed, player wins
 					if(!game.revealed.includes(undefined)) {
+						victory.play();
 						game.wins++;
 						updateWins();
 						game.newGame = true;
 						pressKey.style.visibility = "visible";
-						alert("You win!");
+						// alert("You win!");
 					}
 				} else {
 					game.missesLeft--;
@@ -146,9 +178,10 @@ document.onkeyup = function(event) {
 
 					// if no more misses, player loses
 					if(game.missesLeft == 0){
+						defeat.play();
 						game.newGame = true;
 						pressKey.style.visibility = "visible";
-						alert("You're out of guesses. :(");
+						// alert("You're out of guesses. :(");
 					}
 				}
 			}
